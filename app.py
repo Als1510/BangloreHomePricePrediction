@@ -14,6 +14,7 @@ app.config['SECRET_KEY'] = "my super secret"
 
 @app.route('/', methods=['POST', 'GET'])
 def predict_home_price():
+  load_saved_artifacts()
   result = None
   if flask.request.method=='POST':
     try:
@@ -54,5 +55,4 @@ def load_saved_artifacts():
 
 if __name__ == "__main__":
   print("Server Running")
-  load_saved_artifacts()
   app.run()
