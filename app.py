@@ -6,7 +6,7 @@ import flask
 
 app = Flask(__name__)
 
-__locations = None
+__locations = []
 __data_columns = None
 __model = None
 
