@@ -12,6 +12,21 @@ __model = None
 
 app.config['SECRET_KEY'] = "my super secret"
 
+def load_saved_artifacts():
+  global __data_columns
+  global __locations
+
+  with open("./artifacts/columns.json", "r") as f:
+    __data_columns = json.load(f)['data_columns']
+    __locations = __data_columns[3:]
+
+  global __model
+  if __model is None:
+    with open("./artifacts/banglore_home_prices_model.pickle", "rb") as f:
+      __model = pickle.load(f)
+
+  print("Loading saved artifacts")
+
 @app.route('/', methods=['POST', 'GET'])
 def predict_home_price():
   load_saved_artifacts()
@@ -37,21 +52,6 @@ def predict_home_price():
     result = round(__model.predict([x])[0],2)
     
   return render_template('home.html', result=result, __locations=__locations)
-
-def load_saved_artifacts():
-  global __data_columns
-  global __locations
-
-  with open("./artifacts/columns.json", "r") as f:
-    __data_columns = json.load(f)['data_columns']
-    __locations = __data_columns[3:]
-
-  global __model
-  if __model is None:
-    with open("./artifacts/banglore_home_prices_model.pickle", "rb") as f:
-      __model = pickle.load(f)
-
-  print("Loading saved artifacts")
 
 if __name__ == "__main__":
   print("Server Running")
